@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+const cors = require('cors');
 const router = require("./routes/url");
 const URL = require("./model/shortUrl");
 const connectToMongoDB = require("./connectDB");
@@ -8,6 +9,9 @@ const port = process.env.PORT;
 console.log(port);
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:5173"
+}))
 
 app.use("/url", router);
 
