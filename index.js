@@ -4,17 +4,27 @@ const cors = require('cors');
 const router = require("./routes/url");
 const URL = require("./model/shortUrl");
 const connectToMongoDB = require("./connectDB");
+const userRouter = require("./routes/users");
+const cookieParser = require("cookie-parser");
+const restrictToLoggedInUserOnly = require("./auth/auth");
 const port = process.env.PORT;
 
 console.log(port);
+
 const app = express();
+
 app.use(express.json());
+app.use(cookieParser());
+
+app.use(express.urlencoded({extended : false}))
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "http://localhost:5173",
+    credentials: true,
 }))
 
-app.use("/url", router);
+app.use("/url",restrictToLoggedInUserOnly, router);
 
+app.use("/user",userRouter)
 
 app.get("/:shortId", async (req, res) => {
   let shortId = req.params.shortId;

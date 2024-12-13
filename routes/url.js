@@ -1,5 +1,6 @@
 const express = require('express');
 const {handleNewShortUrl, handleAnalytic} = require('../controller/urlController');
+const restrictToLoggedInUserOnly = require('../auth/auth');
 
 const router = express.Router();
 
