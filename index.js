@@ -17,10 +17,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(express.urlencoded({extended : false}))
-app.use(cors({
-    origin: "*",
-    credentials: true,
-}))
+
+const corsOptions = (req, callback) => {
+  // Allow any origin by dynamically setting the origin
+  const allowedOrigin = req.header("Origin");
+  callback(null, {
+    origin: allowedOrigin,  // Dynamically allow any origin
+    credentials: true,      // Allow credentials (cookies, etc.)
+  });
+};
+app.use(cors(corsOptions))
 
 app.use("/url",restrictToLoggedInUserOnly, router);
 
